@@ -24,9 +24,9 @@ Hi, I'm [Bhagyesh Kumar] 👨‍💻, a **Cyber Physical Systems** at MIT Manipa
 
 ## 📊 GitHub Stats
 
-![Your GitHub stats](https://github-readme-stats.vercel.app/api?invi-bhagyesh=your-github-invi-bhagyesh&show_icons=true&hide=issues&theme=radical)
+![Your GitHub stats](https://github-readme-stats.vercel.app/api?username=invi-bhagyesh&show_icons=true&hide=issues&theme=radical)
 
-[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?invi-bhagyesh=your-github-invi-bhagyesh&layout=compact&theme=radical)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=invi-bhagyesh&layout=compact&theme=radical)](https://github.com/anuraghazra/github-readme-stats)
 
 ---
 
