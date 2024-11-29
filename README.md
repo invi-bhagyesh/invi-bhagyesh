@@ -1,16 +1,37 @@
-## Hi there 👋
+## 👋 Welcome to My GitHub Profile!
 
-<!--
-**invi-bhagyesh/invi-bhagyesh** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Hi, I'm [Bhagyesh Kumar] 👨‍💻, a **Cyber Physical Systems** at MIT Manipal, passionate about **Machine Learning, Artificial Intelligence, and Quantitative Finance**. I'm on a journey to explore and build impactful projects while honing my skills in **programming, mathematics, and research**.
 
-Here are some ideas to get you started:
+---
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## 🌟 About Me
+
+- 🔭 Currently exploring **AI Research** and working on **machine learning models**.
+- 📚 Learning advanced mathematics to strengthen my understanding of ML algorithms.
+- 🤖 Interested in computer vision, autonomous systems, and alternative fuel technologies.
+- 🎯 Always looking for ways to integrate **tech and finance**.
+
+---
+
+## 🛠️ Skills
+
+- **Programming Languages**: Python, MATLAB (beginner)
+- **Frameworks & Libraries**: NumPy, pandas, 
+- **Tools**: Jupyter Notebooks, Git/GitHub
+- **Other Areas**: Data preprocessing, regression analysis, and logistics-based modeling
+
+---
+
+## 📊 GitHub Stats
+
+![Your GitHub stats](https://github-readme-stats.vercel.app/api?invi-bhagyesh=your-github-invi-bhagyesh&show_icons=true&hide=issues&theme=radical)
+
+[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?invi-bhagyesh=your-github-invi-bhagyesh&layout=compact&theme=radical)](https://github.com/anuraghazra/github-readme-stats)
+
+---
+
+## 📬 Let's Connect!
+
+- [LinkedIn](https://linkedin.com/in/invibhagyesh)
+
+Feel free to explore my repositories!
