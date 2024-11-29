@@ -1,6 +1,6 @@
 ## 👋 Welcome to My GitHub Profile!
 
-Hi, I'm [Bhagyesh Kumar] 👨‍💻, a **Cyber Physical Systems** at MIT Manipal, passionate about **Machine Learning, Artificial Intelligence, and Quantitative Finance**. I'm on a journey to explore and build impactful projects while honing my skills in **programming, mathematics, and research**.
+Hi, I'm [Bhagyesh Kumar](https://linkedin.com/in/invibhagyesh) 👨‍💻, a **Cyber Physical Systems** at MIT Manipal, passionate about **Machine Learning, Artificial Intelligence, and Quantitative Finance**. I'm on a journey to explore and build impactful projects while honing my skills in **programming, mathematics, and research**.
 
 ---
 
@@ -8,7 +8,7 @@ Hi, I'm [Bhagyesh Kumar] 👨‍💻, a **Cyber Physical Systems** at MIT Manipa
 
 - 🔭 Currently exploring **AI Research** and working on **machine learning models**.
 - 📚 Learning advanced mathematics to strengthen my understanding of ML algorithms.
-- 🤖 Interested in computer vision, autonomous systems, and alternative fuel technologies.
+- 🤖 Interested in computer vision, finance, and astronomy.
 - 🎯 Always looking for ways to integrate **tech and finance**.
 
 ---
