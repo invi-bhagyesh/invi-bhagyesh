@@ -22,12 +22,6 @@ Hi, I'm **[Bhagyesh Kumar](https://linkedin.com/in/invibhagyesh)** 👨‍💻, 
 
 ---
 
-## 📊 GitHub Stats
-
-[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=invi-bhagyesh&layout=compact&theme=radical)](https://github.com/anuraghazra/github-readme-stats)
-
----
-
 ## 📬 Let's Connect!
 
 - [LinkedIn](https://linkedin.com/in/invibhagyesh)
