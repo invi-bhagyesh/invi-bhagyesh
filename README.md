@@ -1,5 +1,1 @@
-Hi, I’m **[Bhagyesh Kumar](https://linkedin.com/in/invibhagyesh)**  👨‍💻, studying at MIT Manipal, learning about Machine Learning, Artificial Intelligence, and Quantitative Finance.
-
-🔭 Currently exploring AI Research while working on machine learning models.
-
-Feel free to explore my repositories!
+Hi, I’m **Bhagyesh Kumar**  👨‍💻, studying Mathematics and Computing as my undergrad major though spending most of time exploring  AI Research 
