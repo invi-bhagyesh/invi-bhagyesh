@@ -1,4 +1,4 @@
-Bhagyesh Kumar | Undergrad in Math & Computing
+Bhagyesh Kumar • Undergrad in Math & Computing
 ```
                               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
                               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
