@@ -16,3 +16,6 @@ Bhagyesh Kumar • Undergrad in Math & Computing
                               ⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
                               ⠀⠀⣻⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
                               ⠀⠀⢸⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
+
+```
+[![invi's GitHub stats](https://github-readme-stats.vercel.app/api?username=invi-bhagyesh)](https://github.com/invi-bhagyesh/github-readme-stats)
