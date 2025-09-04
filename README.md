@@ -36,18 +36,16 @@ Bhagyesh Kumar • Undergrad in Math & Computing
 </div>
 
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=600&size=26&duration=4000&pause=800&color=BB86FC&vCenter=true&width=800&height=100&center=true&lines=Hi%2C+Bhagyesh+here;ML+Researcher;Web+Developer;Open+Source+Contributor" alt="Typing Animation"/>
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=600&size=26&duration=4000&pause=800&color=BB86FC&vCenter=true&width=800&height=100&center=true&lines=Hi%2C+Bhagyesh+here" alt="Typing Animation"/>
 </div>
 
 
 <p align="center" style="color:#FFD700; font-size:18px;"><b>Machine Learning Enthusiast</b></p>
-<p align="center" style="color:#FF6347; font-size:18px;"><b>🚀 Passionate about Open Source & Collaboration</b></p>
 
 <!-- Badges Section -->
 <p align="center">
-  <a href="https://github.com/shravya312"><img src="https://img.shields.io/github/followers/invi-bhagyesh?label=GitHub&style=social" /></a>
+  <a href="https://github.com/invi-bhagyesh"><img src="https://img.shields.io/github/followers/invi-bhagyesh?label=GitHub&style=social" /></a>
   <a href="https://www.linkedin.com/in/invi-bhagyesh/"><img src="https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&style=flat&logoColor=white" /></a>
-  <a href="https://leetcode.com/invi-bhagyesh"><img src="https://img.shields.io/badge/LeetCode-Active-orange?logo=leetcode" /></a>
 </p>
 
 <!-- Rainbow Divider -->
@@ -90,13 +88,6 @@ Bhagyesh Kumar • Undergrad in Math & Computing
 
 ---
 
-## 🏆 GitHub Trophy
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=invi-bhagyesh&theme=radical&margin-w=10&row=2&column=3" />
-</p>
-
----
-
 <h1 align="center"> 📊 GitHub Stats: </h1>
 
 <div align="center">
@@ -117,12 +108,6 @@ Bhagyesh Kumar • Undergrad in Math & Computing
 ## 📈 GitHub Contribution Graph
 
 ![ github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=invi-bhagyesh&theme=radical&hide_border=true)
-
----
-
-## 👀 Visitor Count
-
-![Visitor Count](https://hits.sechi.me/hits?url=your-unique-page-identifier&count_bg=%237CD392&title_bg=%23555555&type=svg)
 
 ---
 
