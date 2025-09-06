@@ -1,7 +1,7 @@
 <!-- Intro Section -->
 <p align="center">
   <a href="https://www.pinterest.com/i/3VBVEDpEw/">
-    <img src="https://i.pinimg.com/originals/5c/f4/...your-image-id.jpg" width="345" alt="Pinterest Embed" />
+    <img src="https://www.pinterest.com/i/3VBVEDpEw/" width="345" alt="Pinterest Embed" />
   </a>
 </p>
 
