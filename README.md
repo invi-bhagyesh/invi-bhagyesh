@@ -1,6 +1,8 @@
 <!-- Intro Section -->
 <p align="center">
-  <iframe src="https://assets.pinterest.com/ext/embed.html?id=6896205673272684" height="295" width="345" frameborder="0" scrolling="no"></iframe>
+  <a href="https://www.pinterest.com/pin/6896205673272684/">
+    <img src="https://i.pinimg.com/originals/5c/f4/...your-image-id.jpg" width="345" alt="Pinterest Embed" />
+  </a>
 </p>
 
 <h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
