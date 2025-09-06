@@ -42,5 +42,5 @@
   <img src="https://visitor-badge.laobi.icu/badge?page_id=invi-bhagyesh.invi-bhagyesh&rstyle=plastic&left_text=Profile%20Views%20:" alt="Profile Views" />
 </p>
 <div align="center">
-<img hight="400" width="1200" alt="GIF" align="center" src="assets/cat.gif">
+<img hight="400" width="1200" alt="GIF" align="center" src="assets/Cat.gif">
 </div>
