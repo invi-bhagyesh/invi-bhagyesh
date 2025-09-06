@@ -1,9 +1,9 @@
 <!-- Intro Section -->
-<p align="center">
-  <a href="https://www.pinterest.com/i/3VBVEDpEw/">
-    <img src="https://www.pinterest.com/i/3VBVEDpEw/" width="345" alt="Pinterest Embed" />
-  </a>
-</p>
+
+
+<img src="https://github.com/user-attachments/assets/1e8be543-3056-4e6e-8ea1-eecf0dbdb03b" alt="Description" />
+
+
 
 <h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
 ```
