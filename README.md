@@ -1,6 +1,4 @@
 <!-- Intro Section -->
-
-<br/>
 <hr/>
 <h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
 
