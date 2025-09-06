@@ -1,8 +1,9 @@
 <!-- Intro Section -->
 
 
-<img src="https://github.com/user-attachments/assets/1e8be543-3056-4e6e-8ea1-eecf0dbdb03b" alt="Description" />
-
+<p align="center">
+  <img src="assets/cat.gif" width="345" alt="Funny cat" />
+</p>
 
 
 <h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
