@@ -1,4 +1,9 @@
-Bhagyesh Kumar • Undergrad in Math & Computing
+<!-- Intro Section -->
+<p align="center">
+  <iframe src="https://assets.pinterest.com/ext/embed.html?id=6896205673272684" height="295" width="345" frameborder="0" scrolling="no"></iframe>
+</p>
+
+<h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
 ```
                               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
                               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
