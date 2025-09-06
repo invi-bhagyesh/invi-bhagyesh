@@ -1,11 +1,11 @@
 <!-- Intro Section -->
 
+<div align="center">
+<img hight="400" width="1200" alt="GIF" align="center" src="assets/cat.gif">
+</div>
 
-<p align="center">
-  <img src="assets/cat.gif" width="345" alt="Funny cat" />
-</p>
-
-
+<br/>
+<hr/>
 <h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
 
                               ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
