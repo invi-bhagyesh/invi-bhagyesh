@@ -1,6 +1,6 @@
 <!-- Intro Section -->
 <p align="center">
-  <a href="https://www.pinterest.com/pin/6896205673272684/">
+  <a href="https://www.pinterest.com/i/3VBVEDpEw/">
     <img src="https://i.pinimg.com/originals/5c/f4/...your-image-id.jpg" width="345" alt="Pinterest Embed" />
   </a>
 </p>
@@ -24,7 +24,8 @@
                               ⠀⠀⣻⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
                               ⠀⠀⢸⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
 
-```
+
+
 <p align="center">
   <table>
     <tr>
