@@ -7,14 +7,16 @@
 <h2 align="center">Bhagyesh Kumar • Undergrad in Math & Computing</h2>
 <br/>
 <p align="center">
-  <table>
+<!--   <table>
     <tr>
       <td>
         <img src="https://github-readme-stats.vercel.app/api?username=invi-bhagyesh&show_icons=true&theme=radical" alt="Bhagyesh's GitHub Stats" />
       </td>
     </tr>
 
-  </table>
+  </table> -->
+          <img src="https://github-readme-stats.vercel.app/api?username=invi-bhagyesh&show_icons=true&theme=radical" alt="Bhagyesh's GitHub Stats" />
+
 </p>
 
 <p align="center">
