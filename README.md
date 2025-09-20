@@ -12,10 +12,7 @@
       <td>
         <img src="https://github-readme-stats.vercel.app/api?username=invi-bhagyesh&show_icons=true&theme=radical" alt="Bhagyesh's GitHub Stats" />
       </td>
-      <td>
-        <img src="https://github-readme-streak-stats.herokuapp.com/?user=invi-bhagyesh&theme=gotham&hide_border=true" alt="invi's Streak" />
-      </td>
-    </tr>
+
   </table>
 </p>
 
