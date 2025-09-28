@@ -14,9 +14,9 @@
       </td>
     </tr>
 
-  </table> -->
+  </table> 
           <img src="https://github-readme-stats.vercel.app/api?username=invi-bhagyesh&show_icons=true&theme=radical" alt="Bhagyesh's GitHub Stats" />
-
+-->
 </p>
 
 <p align="center">
