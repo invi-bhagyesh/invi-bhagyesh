@@ -24,6 +24,7 @@ Undergrad in Mathematics & Computing
 > Chrome extension that lets you share your open-source conversations
 
 <table align="left" width="80%">
+  <tr></tr>
 <tr>
   <td></td>
 <td width="55%" valign="center" align="center">
@@ -54,4 +55,5 @@ Undergrad in Mathematics & Computing
 <td> 
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=invi-bhagyesh&days=45&bg_color=0c1014&color=268f77&line=268f77&point=268f77&area=true&hide_border=true" alt="invi's GitHub Activity Graph" ></td>
 </tr>
+<tr></tr>
 </table>
