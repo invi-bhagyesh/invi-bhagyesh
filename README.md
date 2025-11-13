@@ -2,7 +2,7 @@
 <h3 align="center">Undergrad in Mathematics & Computing</h3>
 <hr/> -->
 # Bhagyesh Kumar (@invi-bhagyesh)
-> Undergrad in Mathematics & Computing
+Undergrad in Mathematics & Computing
 
 ### Selected Projects
 1. Computer Vision
