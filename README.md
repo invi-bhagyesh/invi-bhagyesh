@@ -5,6 +5,7 @@
 > Undergrad in Mathematics & Computing
 <table align="left" width="80%">
 <tr>
+  <td></td>
 <td width="55%" valign="center" align="center">
   <img height="300" width="100%" alt="GIF" src="assets/Cat.gif">
 </td>
@@ -29,6 +30,7 @@
 ```
 
 </td>
-<td>  <img src="https://github-readme-activity-graph.vercel.app/graph?username=invi-bhagyesh&days=45&bg_color=0c1014&color=268f77&line=268f77&point=268f77&area=true&hide_border=true" alt="invi's GitHub Activity Graph" /></td>
+<td> 
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=invi-bhagyesh&days=45&bg_color=0c1014&color=268f77&line=268f77&point=268f77&area=true&hide_border=true" alt="invi's GitHub Activity Graph" ></td>
 </tr>
 </table>
