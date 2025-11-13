@@ -7,7 +7,7 @@
 <tr>
   <td></td>
 <td width="55%" valign="center" align="center">
-  <img height="300" width="100%" alt="GIF" src="assets/Cat.gif">
+  <img height="300" width="100%" alt="GIF" src="assets/cat.jpeg">
 </td>
 <td width="45%" valign="center" align="center" style="font-family: monospace; white-space: pre; color: #00ffaa; background-color: #0c1014; border-radius: 10px; padding: 15px;">
     
