@@ -7,8 +7,11 @@ Undergrad in Mathematics & Computing
 ### Selected Projects
 1. Computer Vision
 
-[TopoReformer](https://github.com/invi-bhagyesh/TopoReformer)
+[TopoReformer](https://github.com/invi-bhagyesh/TopoReformer) <sub>(*Accepted at the 5th Workshop on AI for CyberSecurity @AAAI 2026)*</sub>
 > Mitigating Adversarial Attacks Using Topological Purification in OCR Models
+
+
+
 
 2. LLMs
 
