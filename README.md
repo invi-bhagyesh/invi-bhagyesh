@@ -13,7 +13,7 @@ Undergrad in Mathematics & Computing
 
 2. LLMs
 
-[LM-quant](https://github.com/invi-bhagyesh/LM-quant) ~(<sub>*fix by 13th Nov*</sub>)~
+[LM-quant](https://github.com/invi-bhagyesh/LM-quant) <sub>(~*fix by 13th Nov*~)</sub>
 > Benchmarking SLMs on quantization and RLHF effects to measure bias and fairness across standard evaluation datasets.
 
 [LM-collusion](https://github.com/invi-bhagyesh/Agent-Collusion) 
