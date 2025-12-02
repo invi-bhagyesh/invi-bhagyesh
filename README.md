@@ -11,11 +11,9 @@ Undergrad in Mathematics & Computing
 > Mitigating Adversarial Attacks Using Topological Purification in OCR Models
 
 
-
-
 2. LLMs
 
-[LM-quant](https://github.com/invi-bhagyesh/LM-quant) ~(fix by 13th Nov)~
+[LM-quant](https://github.com/invi-bhagyesh/LM-quant) ~(<sub>*fix by 13th Nov*</sub>)~
 > Benchmarking SLMs on quantization and RLHF effects to measure bias and fairness across standard evaluation datasets.
 
 [LM-collusion](https://github.com/invi-bhagyesh/Agent-Collusion) 
