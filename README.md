@@ -13,6 +13,9 @@ Undergrad in Mathematics & Computing
 
 2. LLMs
 
+[Adaptive Safety Calibration via Representation Engineering](https://github.com/invi-bhagyesh/Adaptive-Calibrate-RepE)
+> A representation-engineering framework that probes and intervenes on internal harmfulness and refusal signals in LLMs to calibrate safety behavior
+
 [LM-quant](https://github.com/invi-bhagyesh/LM-quant) 
 > Benchmarking SLMs on quantization and RLHF effects to measure bias and fairness across standard evaluation datasets.
 
