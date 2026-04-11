@@ -13,7 +13,7 @@ Undergrad in Mathematics & Computing
 
 2. LLMs
 
-[Stress testing eval awareness in LLMs(https://github.com/invi-bhagyesh/eval-evasion)
+[Stress testing eval awareness in LLMs](https://github.com/invi-bhagyesh/eval-evasion)
 > Training model organisms that (evade activation-based eval-awareness probes) U (non-verbalised) while preserving eval-aware behavior.
 
 [LM-quant](https://github.com/invi-bhagyesh/LM-quant) 
