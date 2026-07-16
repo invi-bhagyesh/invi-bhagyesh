@@ -3,7 +3,7 @@
 <hr/> -->
 # Bhagyesh Kumar (@invi-bhagyesh)
 Undergrad in Mathematics & Computing
-
+<!--
 ### Selected Projects
 1. Computer Vision
 
@@ -26,7 +26,7 @@ Undergrad in Mathematics & Computing
 
 [share-lm](https://github.com/shachardon/share-lm)
 > Chrome extension that lets you share your open-source conversations
-
+-->
 <table align="left" width="80%">
   <tr></tr>
 <tr>
