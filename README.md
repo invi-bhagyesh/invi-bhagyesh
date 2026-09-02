@@ -54,10 +54,12 @@ Undergrad in Mathematics & CS, exchange @USTC
 ⠀⣻⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
 ⠀⢸⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
 ```
-
+<!--
 </td>
 <td> 
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=invi-bhagyesh&days=45&bg_color=0c1014&color=268f77&line=268f77&point=268f77&area=true&hide_border=true" alt="invi's GitHub Activity Graph" ></td>
 </tr>
+!-->
 <tr></tr>
+
 </table>
