@@ -2,7 +2,8 @@
 <h3 align="center">Undergrad in Mathematics & Computing</h3>
 <hr/> -->
 # Bhagyesh Kumar (@invi-bhagyesh)
-Undergrad in Mathematics & CS, exchange @USTC
+Undergrad in Mathematics & CS, exchange @USTC   
+[curius?](https://curius.app/bhagyesh-kumar)
 <!--
 ### Selected Projects
 1. Computer Vision
