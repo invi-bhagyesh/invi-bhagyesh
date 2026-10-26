@@ -5,6 +5,8 @@
 Undergrad in Mathematics & CS, exchange @USTC   
 [curius?](https://curius.app/bhagyesh-kumar)
 
+![A ginger cat and a blue-grey cat playing fetch through portals](assets/cat-playground.svg)
+
 <!--
 ### Selected Projects
 1. Computer Vision
@@ -65,7 +67,3 @@ Undergrad in Mathematics & CS, exchange @USTC
 <tr></tr>
 
 </table>
-
-<br clear="all">
-
-![Two pixel cats playing with a ball and jumping through portals](assets/cat-playground.svg)

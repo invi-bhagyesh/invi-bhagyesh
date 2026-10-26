@@ -1,97 +1,149 @@
 #!/usr/bin/env python3
-"""Build a self-contained pixel-cat playground for the profile README."""
+"""Deterministic 24-second playground: shared contact times, ballistic bounces."""
 import base64
+from math import pi
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+DURATION = 24
+GROUND = 150
+FPS = 30
 
 
-def image(name, width, height, extra=''):
-    data = base64.b64encode((ROOT / 'assets' / name).read_bytes()).decode()
-    return f'<image width="{width}" height="{height}" href="data:image/png;base64,{data}" {extra}/>'
+def ease(t, a, b, x, y):
+    u = max(0, min(1, (t-a)/(b-a)))
+    return x+(y-x)*(u*u*(3-2*u))
 
 
-def cat(name):
-    walk = image('cat-walk-left.png', 162, 43, 'class="walk-sheet"')
-    rest = image('cat-awake.png', 57, 46)
-    return f'''<g class="cat {name}"><g class="facing">
-      <g class="running"><svg x="-27" y="-43" width="54" height="43" viewBox="0 0 54 43" overflow="hidden">{walk}</svg></g>
-      <g class="resting" transform="translate(-28 -46)">{rest}</g>
-    </g></g>'''
+def bounce(t, start, speed):
+    """Gravity in px/s² and coefficient of restitution; no floor penetration."""
+    elapsed = t-start
+    if elapsed < 0:
+        return 0
+    gravity = 200
+    for _ in range(8):
+        flight = 2*speed/gravity
+        if elapsed <= flight:
+            return speed*elapsed-.5*gravity*elapsed*elapsed
+        elapsed -= flight
+        speed *= .45
+    return 0
+
+
+def state(t):
+    # Paw contacts: ginger at 4s, slate at 6s, ginger again at 10s.
+    if t < 4: bx = 286
+    elif t < 6:
+        u=t-4; bx=286+160*u-9*u*u
+    elif t < 10:
+        u=t-6; bx=570-130*u+9*u*u
+    elif t < 12:
+        u=t-10; bx=194+92*u-23*u*u
+    else: bx=286
+    lift = bounce(t,4,70) if t < 6 else bounce(t,6,90) if t < 10 else bounce(t,10,35)
+    by = GROUND-8-lift
+    # Walking sprite's front paw is about 26 px from its root.
+    if t < 2: ax=150
+    elif t < 4: ax=ease(t,2,4,150,252)
+    elif t < 5.2: ax=ease(t,4,5.2,252,400)
+    elif t < 6.4: ax=400+(t-5.2)/1.2*128
+    elif t < 6.8: ax=72+(t-6.4)/.4*56
+    elif t < 9.8: ax=ease(t,6.8,9.8,128,160)
+    elif t < 12: ax=160
+    elif t < 14: ax=ease(t,12,14,160,150)
+    else: ax=150
+    # Ballistic leap, landing at the portal before running through it.
+    u=max(0,min(1,(t-5.2)/.9))
+    ay=GROUND-4*34*u*(1-u)
+    if 6.4 <= t <= 6.8:
+        u=(t-6.4)/.4;ay=GROUND-4*8*u*(1-u)
+    if t < 3: cx=680
+    elif t < 6: cx=ease(t,3,6,680,604)
+    elif t < 10.5: cx=604
+    elif t < 14: cx=ease(t,10.5,14,604,680)
+    else: cx=680
+    def pose(running, sleeping):
+        return 'sleep' if sleeping else 'run' if running else 'sit'
+    # Brief held walking poses at impacts keep the same paw on the ball.
+    ap=pose(2<=t<10.15 or 12<=t<14,15<=t<21)
+    cp=pose(3<=t<6.15 or 10.5<=t<14,t<2.3 or t>=15)
+    # Three authored in-between poses: unfold before locomotion, settle after.
+    def transition(pose, events):
+        for start, family, reverse in events:
+            if start <= t < start+.3:
+                frame=min(2,int((t-start)/.1))
+                return family+str(3-frame if reverse else frame+1)
+        return pose
+    ap=transition(ap,[(1.7,'stand',False),(10.15,'stand',True),
+        (11.7,'stand',False),(14,'stand',True),(14.7,'curl',False),(21,'curl',True)])
+    cp=transition(cp,[(2.3,'curl',True),(2.7,'stand',False),
+        (6.15,'stand',True),(10.2,'stand',False),(14,'stand',True),(14.7,'curl',False)])
+    af=1 if 12<=t<21 else -1
+    cf=-1 if 10.5<=t<14 else 1
+    return dict(ax=ax,ay=ay,cx=cx,cy=GROUND,ap=ap,cp=cp,af=af,cf=cf,bx=bx,by=by)
+
+
+def frames(name, values, discrete=False):
+    # Keep identical states only at the boundaries of each constant interval.
+    keys=[]
+    for i, value in enumerate(values):
+        if i in (0,len(values)-1) or value!=values[i-1] or value!=values[i+1]:
+            keys.append(f'{i/(len(values)-1)*100:.5f}%{{{value}}}')
+    return f'.{name}{{animation:{name} {DURATION}s {"steps(1,end)" if discrete else "linear"} infinite}}@keyframes {name}{{'+''.join(keys)+'}'
+
+
+def sprite(color, pose):
+    data=base64.b64encode((ROOT/'assets'/f'play-{color}-{pose}.png').read_bytes()).decode()
+    width=192 if pose=='run' else 64
+    return f'<svg x="-32" y="-48" width="64" height="48" viewBox="0 0 64 48" overflow="hidden"><image class="{"stride" if pose=="run" else ""}" width="{width}" height="48" href="data:image/png;base64,{data}"/></svg>'
 
 
 def render():
+    times=[i/FPS for i in range(DURATION*FPS+1)]
+    states=[state(t) for t in times]
+    css=['''
+:root{--floor:#d8d2c4;--blue:#68b4cd;--pink:#d68bab}
+@media(prefers-color-scheme:dark){:root{--floor:#454640;--blue:#89d2e6;--pink:#e7a7cc}}
+image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infinite}
+@keyframes stride{0%{transform:translateX(0)}33.333%{transform:translateX(-64px)}66.667%{transform:translateX(-128px)}}
+.portal{transform-box:fill-box;transform-origin:center;animation:portal 24s linear infinite}
+@keyframes portal{0%,20%,31%,100%{opacity:0;transform:scale(.1,.05)}22%,29%{opacity:1;transform:scale(1)}}
+.orange-gate{animation:gate 24s steps(1,end) infinite}
+@keyframes gate{0%{clip-path:url(#entry-clip)}26.66667%{clip-path:url(#exit-clip)}100%{clip-path:url(#entry-clip)}}
+''']
+    cats=[]
+    for prefix,color in [('a','ginger'),('c','slate')]:
+        css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.3f}px,{s[prefix+"y"]:.3f}px)' for s in states]))
+        css.append(frames(prefix+'-face',[f'transform:scaleX({s[prefix+"f"]})' for s in states],True))
+        poses=[]
+        for pose in ['run','sit','sleep','stand1','stand2','stand3','curl1','curl2','curl3']:
+            name=prefix+'-'+pose
+            css.append(frames(name,[f'opacity:{int(s[prefix+"p"]==pose)}' for s in states],True))
+            poses.append(f'<g class="{name} pose">{sprite(color,pose)}</g>')
+        cats.append(f'<g class="{prefix}-move cat"><g class="{prefix}-face">'+''.join(poses)+'</g></g>')
+    css.append(frames('ball-move',[f'transform:translate({s["bx"]:.3f}px,{s["by"]:.3f}px)' for s in states]))
+    css.append(frames('ball-spin',[f'transform:rotate({(s["bx"]-286)/8*180/pi:.3f}deg)' for s in states]))
+    css.append(frames('ball-shadow',[f'transform:translate({s["bx"]:.3f}px,151px) scale({1-(142-s["by"])/100:.3f},1);opacity:{.15-(142-s["by"])/400:.3f}' for s in states]))
+    css.append('''@media(prefers-reduced-motion:reduce){
++*{animation:none!important}.portal{display:none}.orange-gate{clip-path:none}
++.a-move{transform:translate(150px,150px)}.c-move{transform:translate(680px,150px)}.a-face{transform:scaleX(-1)}
++.pose{opacity:0}.a-sit,.c-sleep{opacity:1}.ball-move{transform:translate(286px,142px)}.ball-shadow{transform:translate(286px,151px);opacity:.15}
++}'''.replace('+',''))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="860" height="200" viewBox="0 0 860 200" role="img" aria-labelledby="title desc">
-<title id="title">A little cat playground</title>
-<desc id="desc">Two orange pixel cats chase and bat a bouncing ball. One leaps into a blue portal and reappears through a pink portal. They pause between games. No contribution data is displayed.</desc>
-<style>
-:root{{--floor:#d8d2c4;--muted:#897c68;--blue:#79b9cc;--pink:#ce92b7}}
-@media(prefers-color-scheme:dark){{:root{{--floor:#454640;--muted:#aaa18c;--blue:#89d2e6;--pink:#e7a7cc}}}}
-image{{image-rendering:pixelated}}
-.cat,.ball-travel,.ball-hop,.ball-spin,.portal,.facing,.running,.resting{{animation-duration:20s;animation-iteration-count:infinite}}
-.cat{{animation-timing-function:cubic-bezier(.4,0,.2,1)}}
-.first{{animation-name:first}}.second{{animation-name:second}}
-.walk-sheet{{animation:gait .36s steps(1,end) infinite}}
-@keyframes gait{{0%{{transform:translateX(0)}}33.333%{{transform:translateX(-54px)}}66.667%{{transform:translateX(-108px)}}}}
-@keyframes first{{
-0%,8%{{transform:translate(120px,150px);opacity:1}}
-22%{{transform:translate(260px,150px)}}
-40%{{transform:translate(450px,150px)}}
-46%{{transform:translate(595px,102px);opacity:1}}
-49%{{transform:translate(620px,143px);opacity:0}}
-51%{{transform:translate(100px,143px);opacity:0}}
-54%{{transform:translate(125px,130px);opacity:1}}
-58%{{transform:translate(160px,150px)}}
-68%,76%{{transform:translate(235px,150px)}}
-93%,100%{{transform:translate(120px,150px);opacity:1}}
-}}
-@keyframes second{{
-0%,24%{{transform:translate(720px,150px)}}
-36%{{transform:translate(590px,150px)}}
-41%{{transform:translate(560px,137px)}}
-45%,53%{{transform:translate(545px,150px)}}
-64%{{transform:translate(620px,150px)}}
-80%,100%{{transform:translate(720px,150px)}}
-}}
-.first .facing{{animation-name:face-first;animation-timing-function:steps(1,end)}}
-.second .facing{{animation-name:face-second;animation-timing-function:steps(1,end)}}
-@keyframes face-first{{0%{{transform:scaleX(-1)}}76%{{transform:scaleX(1)}}100%{{transform:scaleX(-1)}}}}
-@keyframes face-second{{0%{{transform:scaleX(1)}}53%{{transform:scaleX(-1)}}80%,100%{{transform:scaleX(1)}}}}
-.first .running{{animation-name:run-first;animation-timing-function:steps(1,end)}}
-.first .resting{{animation-name:rest-first;animation-timing-function:steps(1,end)}}
-.second .running{{animation-name:run-second;animation-timing-function:steps(1,end)}}
-.second .resting{{animation-name:rest-second;animation-timing-function:steps(1,end)}}
-@keyframes run-first{{0%{{opacity:0}}8%{{opacity:1}}68%{{opacity:0}}76%{{opacity:1}}93%,100%{{opacity:0}}}}
-@keyframes rest-first{{0%{{opacity:1}}8%{{opacity:0}}68%{{opacity:1}}76%{{opacity:0}}93%,100%{{opacity:1}}}}
-@keyframes run-second{{0%{{opacity:0}}24%{{opacity:1}}45%{{opacity:0}}53%{{opacity:1}}80%,100%{{opacity:0}}}}
-@keyframes rest-second{{0%{{opacity:1}}24%{{opacity:0}}45%{{opacity:1}}53%{{opacity:0}}80%,100%{{opacity:1}}}}
-.ball-travel{{animation-name:ball-travel;animation-timing-function:linear}}
-@keyframes ball-travel{{0%,22%{{transform:translateX(290px)}}41%{{transform:translateX(530px)}}68%{{transform:translateX(270px)}}76%{{transform:translateX(290px)}}100%{{transform:translateX(290px)}}}}
-.ball-hop{{animation-name:ball-hop;animation-timing-function:ease-out}}
-@keyframes ball-hop{{0%,22%{{transform:translateY(142px)}}26%{{transform:translateY(119px)}}30%{{transform:translateY(142px)}}33%{{transform:translateY(130px)}}36%,41%{{transform:translateY(142px)}}46%{{transform:translateY(110px)}}51%{{transform:translateY(142px)}}55%{{transform:translateY(125px)}}59%{{transform:translateY(142px)}}62%{{transform:translateY(135px)}}65%,100%{{transform:translateY(142px)}}}}
-.ball-spin{{animation-name:ball-spin;animation-timing-function:linear}}
-@keyframes ball-spin{{0%,22%{{transform:rotate(0deg)}}41%{{transform:rotate(900deg)}}68%{{transform:rotate(-60deg)}}76%,100%{{transform:rotate(0deg)}}}}
-.portal{{animation-name:portal;transform-box:fill-box;transform-origin:center}}
-@keyframes portal{{0%,37%,64%,100%{{opacity:0;transform:scale(.2,.05)}}42%,58%{{opacity:1;transform:scale(1)}}}}
-@media(prefers-reduced-motion:reduce){{
-.cat,.ball-travel,.ball-hop,.ball-spin,.portal,.facing,.running,.resting,.walk-sheet{{animation:none!important}}
-.first{{transform:translate(120px,150px)}}.second{{transform:translate(720px,150px)}}
-.running,.portal{{display:none}}.resting{{opacity:1}}.first .facing{{transform:scaleX(-1)}}
-.ball-travel{{transform:translateX(290px)}}.ball-hop{{transform:translateY(142px)}}
-}}
-</style>
-<path d="M55 152H805" stroke="var(--floor)" stroke-width="1" stroke-linecap="round"/>
-<g class="portal" fill="none" stroke="var(--pink)"><ellipse cx="100" cy="126" rx="11" ry="29" stroke-width="5" opacity=".18"/><ellipse cx="100" cy="126" rx="7" ry="26" stroke-width="2"/></g>
-<g class="portal" fill="none" stroke="var(--blue)"><ellipse cx="620" cy="126" rx="11" ry="29" stroke-width="5" opacity=".18"/><ellipse cx="620" cy="126" rx="7" ry="26" stroke-width="2"/></g>
-<g class="ball-travel"><g class="ball-hop"><g class="ball-spin">
-<circle r="8" fill="#dfaf68" stroke="#a97943" stroke-width="1"/>
-<path d="M-7-3Q0 3 7-3M-5 6Q1-2 5-6" fill="none" stroke="#fff0cf" stroke-width="1.5"/>
-</g></g></g>
-{cat('first')}{cat('second')}
+<title id="title">Ginger and slate: a little game of fetch</title>
+<desc id="desc">A ginger cat nudges a ball toward a sleepy blue-grey cat, who wakes and bats it back. Ginger takes a portal shortcut to catch it. Both return to their spots and nap. All poses share a consistent head scale and ground line.</desc>
+<style>{''.join(css)}</style>
+<defs><clipPath id="entry-clip"><rect x="0" y="0" width="500" height="200"/></clipPath><clipPath id="exit-clip"><rect x="100" y="0" width="760" height="200"/></clipPath></defs>
+<path d="M55 151H805" stroke="var(--floor)" stroke-linecap="round"/>
+<g class="portal" fill="none" stroke="var(--pink)"><ellipse cx="100" cy="125" rx="10" ry="27" stroke-width="6" opacity=".15"/><ellipse cx="100" cy="125" rx="6" ry="26" stroke-width="2"/></g>
+<g class="portal" fill="none" stroke="var(--blue)"><ellipse cx="500" cy="125" rx="10" ry="27" stroke-width="6" opacity=".15"/><ellipse cx="500" cy="125" rx="6" ry="26" stroke-width="2"/></g>
+<ellipse class="ball-shadow" rx="8" ry="1.5" fill="#554b42"/>
+<g class="ball-move"><g class="ball-spin"><circle r="8" fill="#e8b66f" stroke="#a97943"/><path d="M-7-3Q0 3 7-3M-5 6Q1-2 5-6" fill="none" stroke="#fff0cf" stroke-width="1.5"/></g></g>
+<g class="orange-gate">{cats[0]}</g>{cats[1]}
 </svg>'''
 
 
-if __name__ == '__main__':
-    output = ROOT / 'assets/cat-playground.svg'
+if __name__=='__main__':
+    output=ROOT/'assets/cat-playground.svg'
     output.write_text(render())
-    print(f'Generated {output}')
+    print(f'Generated {output} ({output.stat().st_size:,} bytes)')
