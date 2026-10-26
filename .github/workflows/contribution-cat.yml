@@ -1,0 +1,39 @@
+name: Refresh contribution cat
+
+on:
+  schedule:
+    - cron: '23 3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/contribution_cat.py
+      - .github/workflows/contribution-cat.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: contribution-cat
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate running cat
+        run: python scripts/contribution_cat.py --user invi-bhagyesh --output assets/contribution-cat.svg
+      - name: Commit updated calendar
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/contribution-cat.svg
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh contribution cat"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

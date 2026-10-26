@@ -4,6 +4,9 @@
 # Bhagyesh Kumar (@invi-bhagyesh)
 Undergrad in Mathematics & CS, exchange @USTC   
 [curius?](https://curius.app/bhagyesh-kumar)
+
+![A running cat exploring my GitHub contributions](assets/contribution-cat.svg)
+
 <!--
 ### Selected Projects
 1. Computer Vision
