@@ -57,3 +57,29 @@ for color in ['ginger','cocoa']:
   head=sit.crop((12,19,31,44))
   c.alpha_composite(head,(12,round(19+6*u)))
   c.save(p/f'play-{color}-curl{i}.png')
+
+# Cocoa has a low, unhurried gait and a tucked-paw loaf instead of Ginger's
+# alert crouch. Keep all frames on the same canvas and ground baseline.
+run_path=p/'play-cocoa-run.png'
+sheet=Image.open(run_path)
+result=Image.new('RGBA',sheet.size)
+for frame in range(3):
+ src=sheet.crop((frame*64,0,frame*64+64,48))
+ dst=src.copy()
+ # Shorter steps: bring the lower paws closer beneath the torso.
+ dst.paste((0,0,0,0),(0,37,64,48))
+ legs=src.crop((0,37,64,48)).resize((48,11),Image.Resampling.NEAREST)
+ dst.alpha_composite(legs,(8,37))
+ # Lower, curved tail instead of Ginger's upright flag-like tail.
+ dst.paste((0,0,0,0),(47,0,64,26))
+ draw=ImageDraw.Draw(dst)
+ draw.line([(47,29),(52,29),(56,27),(58,24)],fill='#594737',width=4)
+ draw.line([(47,28),(52,28),(56,26),(58,24)],fill='#a38a6b',width=2)
+ result.alpha_composite(dst,(frame*64,0))
+result.save(run_path)
+sleep=Image.open(p/'play-cocoa-sleep.png')
+sit=Image.open(p/'play-cocoa-sit.png')
+loaf=sleep.copy()
+loaf.paste((0,0,0,0),(10,15,31,45))
+loaf.alpha_composite(sit.crop((12,19,31,44)),(12,23))
+loaf.save(p/'play-cocoa-sit.png')

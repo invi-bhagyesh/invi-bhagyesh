@@ -33,7 +33,7 @@ def bounce(t, start, speed):
 
 
 def state(t):
-    # Paw contacts: ginger at 4s, slate at 6s, ginger again at 10s.
+    # Paw contacts: ginger at 4s, cocoa at 6s, ginger again at 10s.
     if t < 4: bx = 286
     elif t < 6:
         u=t-4; bx=286+160*u-9*u*u
@@ -49,8 +49,8 @@ def state(t):
     elif t < 4: ax=ease(t,2,4,150,235)
     elif t < 5.2: ax=ease(t,4,5.2,235,400)
     elif t < 6.4: ax=400+(t-5.2)/1.2*152
-    elif t < 6.8: ax=48+(t-6.4)/.4*104
-    elif t < 9.8: ax=ease(t,6.8,9.8,152,143)
+    elif t < 6.8: ax=48+(t-6.4)/.4*95
+    elif t < 9.8: ax=143
     elif t < 12: ax=143
     elif t < 14: ax=ease(t,12,14,143,150)
     else: ax=150
@@ -67,7 +67,7 @@ def state(t):
     def pose(running, sleeping):
         return 'sleep' if sleeping else 'run' if running else 'sit'
     # Brief held walking poses at impacts keep the same paw on the ball.
-    ap=pose(2<=t<10.15 or 12<=t<14,15<=t<21)
+    ap=pose(2<=t<6.8 or 9.9<=t<10.15 or 12<=t<14,15<=t<21)
     cp=pose(3<=t<6.15 or 10.5<=t<14,t<2.3 or t>=15)
     # Three authored in-between poses: unfold before locomotion, settle after.
     def transition(pose, events):
@@ -76,11 +76,11 @@ def state(t):
                 frame=min(2,int((t-start)/.1))
                 return family+str(3-frame if reverse else frame+1)
         return pose
-    ap=transition(ap,[(1.7,'stand',False),(10.15,'stand',True),
+    ap=transition(ap,[(1.7,'stand',False),(6.8,'stand',True),(9.6,'stand',False),(10.15,'stand',True),
         (11.7,'stand',False),(14,'stand',True),(14.7,'curl',False),(21,'curl',True)])
     cp=transition(cp,[(2.3,'curl',True),(2.7,'stand',False),
         (6.15,'stand',True),(10.2,'stand',False),(14,'stand',True),(14.7,'curl',False)])
-    af=1 if 12<=t<21 else -1
+    af=-1
     cf=-1 if 10.5<=t<14 else 1
     return dict(ax=ax,ay=ay,cx=cx,cy=GROUND,ap=ap,cp=cp,af=af,cf=cf,bx=bx,by=by)
 
@@ -139,10 +139,9 @@ def render():
     times=[i/FPS for i in range(DURATION*FPS+1)]
     states=[state(t) for t in times]
     css=['''
-:root{--floor:#9d7655;--blue:#77a785;--pink:#b57b92;--sky:#faf0dc;--cloud:#fffaf0;--hill:#d5ddbb;--hill-front:#bbcda1;--grass:#88a871;--soil:#c3926c;--mortar:#ad7e5d;--block:#dcb775}
-@media(prefers-color-scheme:dark){:root{--floor:#715f4d;--blue:#9cc9a4;--pink:#dba5bd;--sky:#272c30;--cloud:#41484a;--hill:#39473e;--hill-front:#465a43;--grass:#698a5a;--soil:#785b47;--mortar:#5c4639;--block:#a08050}}
-image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infinite}
-@keyframes stride{0%{transform:translateX(0)}33.333%{transform:translateX(-64px)}66.667%{transform:translateX(-128px)}}
+:root{--speech-ink:#493b30;--floor:#9d7655;--blue:#77a785;--pink:#b57b92;--sky:#faf0dc;--cloud:#fffaf0;--hill:#d5ddbb;--hill-front:#bbcda1;--grass:#88a871;--soil:#c3926c;--mortar:#ad7e5d;--block:#dcb775}
+@media(prefers-color-scheme:dark){:root{--speech-ink:#f2e8d4;--floor:#715f4d;--blue:#9cc9a4;--pink:#dba5bd;--sky:#272c30;--cloud:#41484a;--hill:#39473e;--hill-front:#465a43;--grass:#698a5a;--soil:#785b47;--mortar:#5c4639;--block:#a08050}}
+image{image-rendering:pixelated}
 .portal{transform-box:fill-box;transform-origin:center;animation:portal 24s linear infinite}
 @keyframes portal{0%,20%,31%,100%{opacity:0;transform:scale(.1,.05)}22%,29%{opacity:1;transform:scale(1)}}
 .orange-gate{animation:gate 24s steps(1,end) infinite}
@@ -152,6 +151,22 @@ image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infin
     for prefix,color in [('a','ginger'),('c','cocoa')]:
         css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.3f}px,{s[prefix+"y"]:.3f}px)' for s in states]))
         css.append(frames(prefix+'-face',[f'transform:scaleX({s[prefix+"f"]})' for s in states],True))
+        # Advance the feet by actual distance, not wall-clock time. Teleport
+        # jumps and airborne movement cannot generate extra steps.
+        distance=0.0
+        gait=[]
+        for i, current in enumerate(states):
+            if i:
+                previous=states[i-1]
+                dx=abs(current[prefix+'x']-previous[prefix+'x'])
+                grounded=current[prefix+'y']>=GROUND-.05 and previous[prefix+'y']>=GROUND-.05
+                if dx<12 and grounded and current[prefix+'p']=='run':
+                    distance+=dx
+            stride_length=30 if prefix=='a' else 43
+            frame=int(distance/stride_length*3)%3
+            gait.append(f'transform:translateX({-64*frame}px)')
+        gait_css=frames(prefix+'-stride',gait,True)
+        css.append(gait_css.replace('.'+prefix+'-stride{','.'+prefix+'-move .stride{'))
         poses=[]
         for pose in ['run','sit','sleep','stand1','stand2','stand3','curl1','curl2','curl3']:
             name=prefix+'-'+pose
@@ -161,14 +176,31 @@ image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infin
     css.append(frames('ball-move',[f'transform:translate({s["bx"]:.3f}px,{s["by"]:.3f}px)' for s in states]))
     css.append(frames('ball-spin',[f'transform:rotate({(s["bx"]-286)/BALL_RADIUS*180/pi:.3f}deg)' for s in states]))
     css.append(frames('ball-shadow',[f'transform:translate({s["bx"]:.3f}px,221px) scale({1-(208-s["by"])/100:.3f},1);opacity:{.15-(208-s["by"])/400:.3f}' for s in states]))
+    dialogue=[
+        ('a',0.15,2.25,'Play with me?'),
+        ('c',2.35,4.0,'One round.'),
+        ('a',4.1,5.2,'Heads up!'),
+        ('c',6.85,9.5,'Portals? Really?'),
+        ('a',9.6,12.0,'Work smarter.'),
+        ('c',12.15,14.7,'Nap harder.'),
+        ('a',21.3,23.9,'Rematch?'),
+    ]
+    bubbles=[]
+    for number,(speaker,start,end,line) in enumerate(dialogue):
+        name=f'speech-{number}'
+        css.append(frames(name,[f'opacity:{int(start<=t<end)};visibility:{"visible" if start<=t<end else "hidden"}' for t in times],True))
+        css.append(frames(name+'-position',[f'transform:translate({max(115,min(745,s[speaker+"x"])):.3f}px,{s[speaker+"y"]-104:.3f}px)' for s in states]))
+        width=max(146,len(line)*9+28)
+        label='GINGER' if speaker=='a' else 'COCOA'
+        bubbles.append(f'<g class="{name} speech"><g class="{name}-position"><path d="M-8 0l8 10 8-10" fill="var(--cloud)" stroke="var(--floor)"/><rect x="{-width/2}" y="-48" width="{width}" height="50" rx="7" fill="var(--cloud)" stroke="var(--floor)"/><text y="-32" text-anchor="middle" font-family="monospace" font-size="9" fill="var(--floor)">{label}</text><text y="-12" text-anchor="middle" font-family="monospace" font-size="16" fill="var(--speech-ink)">{line}</text></g></g>')
     css.append('''@media(prefers-reduced-motion:reduce){
-+*{animation:none!important}.portal{display:none}.orange-gate{clip-path:none}
++*{animation:none!important}.portal,.speech{display:none}.orange-gate{clip-path:none}
 +.a-move{transform:translate(150px,220px)}.c-move{transform:translate(680px,220px)}.a-face{transform:scaleX(-1)}
 +.pose{opacity:0}.a-sit,.c-sleep{opacity:1}.ball-move{transform:translate(286px,208px)}.ball-shadow{transform:translate(286px,221px);opacity:.15}
 +}'''.replace('+',''))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="860" height="280" viewBox="0 0 860 280" role="img" aria-labelledby="title desc">
 <title id="title">Ginger and cocoa: a little pixel playground</title>
-<desc id="desc">A ginger cat nudges a ball toward a sleepy chocolate-cream cat, who wakes and bats it back. Ginger takes a portal shortcut to catch it. Both return to their spots and nap. All poses share a consistent head scale and ground line.</desc>
+<desc id="desc">A ginger cat nudges a ball toward a sleepy chocolate-cream cat, who wakes and bats it back. Ginger takes a portal shortcut to catch it. Ginger asks, Play with me? Cocoa agrees, One round. After the portal shortcut, Cocoa asks, Portals? Really? Ginger replies, Work smarter. Cocoa says, Nap harder. Ginger later asks for a rematch. All poses share a consistent head scale and ground line.</desc>
 <style>{''.join(css)}</style>
 <defs><clipPath id="entry-clip"><rect x="0" y="0" width="500" height="280"/></clipPath><clipPath id="exit-clip"><rect x="100" y="0" width="760" height="280"/></clipPath></defs>
 {environment()}
@@ -177,6 +209,7 @@ image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infin
 <ellipse class="ball-shadow" rx="12" ry="1.5" fill="#554b42"/>
 <g class="ball-move"><g class="ball-spin"><circle r="12" fill="#8cae82" stroke="#526e50" stroke-width="1.5"/><path d="M-10-5Q0 5 10-5M-7 9Q2-3 7-9" fill="none" stroke="#fff0cf" stroke-width="1.5"/></g></g>
 <g class="orange-gate">{cats[0]}</g>{cats[1]}
+{''.join(bubbles)}
 </svg>'''
 
 
