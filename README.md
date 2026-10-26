@@ -5,8 +5,6 @@
 Undergrad in Mathematics & CS, exchange @USTC   
 [curius?](https://curius.app/bhagyesh-kumar)
 
-![A running cat exploring my GitHub contributions](assets/contribution-cat.svg)
-
 <!--
 ### Selected Projects
 1. Computer Vision
@@ -67,3 +65,7 @@ Undergrad in Mathematics & CS, exchange @USTC
 <tr></tr>
 
 </table>
+
+<br clear="all">
+
+![A running cat exploring my GitHub contributions](assets/contribution-cat.svg)

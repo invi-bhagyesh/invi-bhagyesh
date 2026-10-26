@@ -2,7 +2,7 @@
 
 A standalone animated SVG inspired by [Platane/snk](https://github.com/Platane/snk),
 generated here without dependencies. The original orange pixel cat from the
-website runs around the real GitHub contribution calendar on a 24-second loop.
+website runs back and forth beneath the real GitHub contribution calendar on a 24-second loop.
 The cat avoids every square and leaves all contribution colors intact. The
 three-frame sprite is embedded in the SVG, so the image works on its own. The SVG supports dark mode and shows
 the static calendar when reduced motion is requested.
