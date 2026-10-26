@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - scripts/contribution_cat.py
+      - assets/cat-walk-left.png
       - .github/workflows/contribution-cat.yml
 
 permissions:
