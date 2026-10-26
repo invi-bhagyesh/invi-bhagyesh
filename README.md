@@ -68,4 +68,4 @@ Undergrad in Mathematics & CS, exchange @USTC
 
 <br clear="all">
 
-![A running cat exploring my GitHub contributions](assets/contribution-cat.svg)
+![Two pixel cats playing with a ball and jumping through portals](assets/cat-playground.svg)
