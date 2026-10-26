@@ -1,7 +1,7 @@
 # Cat playground
 
-The original ginger pixel cat plays fetch with a blue-grey companion. Ginger
-uses a portal shortcut while slate wakes up, returns the ball, and naps.
+The original ginger pixel cat plays fetch with a cocoa-and-cream companion. Ginger
+uses a portal shortcut while cocoa wakes up, returns the ball, and naps.
 The standalone SVG sits near the top of the README; it needs no network calls.
 
 ## Regenerate
@@ -19,3 +19,8 @@ frames for standing and curling up. Reduced motion shows a static scene.
 Normalized sprites are committed. To rebuild them from the original artwork,
 install Pillow and run `python3 scripts/prepare_cat_sprites.py`, then regenerate
 the SVG. Palette conversion preserves outlines and eye details.
+
+Cats and ball render at 1.5× the original size. Contact positions and portal
+clearance account for the larger silhouettes. Original platformer scenery adds
+grassy brick ground, distant hills, clouds, and paw-print blocks, with light
+and dark palettes. The generated sprite assets use the ginger and cocoa names.

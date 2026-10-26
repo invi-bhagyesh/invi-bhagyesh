@@ -6,7 +6,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DURATION = 24
-GROUND = 150
+GROUND = 220
+CAT_SCALE = 1.5
+BALL_RADIUS = 12
 FPS = 30
 
 
@@ -41,16 +43,16 @@ def state(t):
         u=t-10; bx=194+92*u-23*u*u
     else: bx=286
     lift = bounce(t,4,70) if t < 6 else bounce(t,6,90) if t < 10 else bounce(t,10,35)
-    by = GROUND-8-lift
-    # Walking sprite's front paw is about 26 px from its root.
+    by = GROUND-BALL_RADIUS-lift
+    # Scaled paw offset is 39 px; contacts include the 12 px ball radius.
     if t < 2: ax=150
-    elif t < 4: ax=ease(t,2,4,150,252)
-    elif t < 5.2: ax=ease(t,4,5.2,252,400)
-    elif t < 6.4: ax=400+(t-5.2)/1.2*128
-    elif t < 6.8: ax=72+(t-6.4)/.4*56
-    elif t < 9.8: ax=ease(t,6.8,9.8,128,160)
-    elif t < 12: ax=160
-    elif t < 14: ax=ease(t,12,14,160,150)
+    elif t < 4: ax=ease(t,2,4,150,235)
+    elif t < 5.2: ax=ease(t,4,5.2,235,400)
+    elif t < 6.4: ax=400+(t-5.2)/1.2*152
+    elif t < 6.8: ax=48+(t-6.4)/.4*104
+    elif t < 9.8: ax=ease(t,6.8,9.8,152,143)
+    elif t < 12: ax=143
+    elif t < 14: ax=ease(t,12,14,143,150)
     else: ax=150
     # Ballistic leap, landing at the portal before running through it.
     u=max(0,min(1,(t-5.2)/.9))
@@ -58,9 +60,9 @@ def state(t):
     if 6.4 <= t <= 6.8:
         u=(t-6.4)/.4;ay=GROUND-4*8*u*(1-u)
     if t < 3: cx=680
-    elif t < 6: cx=ease(t,3,6,680,604)
-    elif t < 10.5: cx=604
-    elif t < 14: cx=ease(t,10.5,14,604,680)
+    elif t < 6: cx=ease(t,3,6,680,621)
+    elif t < 10.5: cx=621
+    elif t < 14: cx=ease(t,10.5,14,621,680)
     else: cx=680
     def pose(running, sleeping):
         return 'sleep' if sleeping else 'run' if running else 'sit'
@@ -98,12 +100,47 @@ def sprite(color, pose):
     return f'<svg x="-32" y="-48" width="64" height="48" viewBox="0 0 64 48" overflow="hidden"><image class="{"stride" if pose=="run" else ""}" width="{width}" height="48" href="data:image/png;base64,{data}"/></svg>'
 
 
+def environment():
+    """Original platformer scenery, kept behind the playable ground plane."""
+    bricks = ''.join(
+        f'<path d="M{x} {y}v24"/>'
+        for y, offset in [(232, 0), (256, 24)] for x in range(offset, 861, 48)
+    )
+    tufts = ''.join(
+        f'<path d="M{x} 220v-6h4v3h4v-7h4v10Z"/>'
+        for x in [24, 65, 330, 360, 755, 810]
+    )
+    blocks = []
+    for x,y,paw in [(294,76,False),(326,76,True),(358,76,False),(690,66,True),(722,66,False)]:
+        blocks.append(f'<rect x="{x}" y="{y}" width="30" height="28" rx="1" fill="var(--block)" stroke="var(--floor)" stroke-width="2"/>')
+        blocks.append(f'<path d="M{x+3} {y+24}V{y+3}h24" fill="none" stroke="#fff0cd" opacity=".5" stroke-width="2"/>')
+        if paw:
+            blocks.append(f'<path d="M{x+11} {y+15}h9v7h-9ZM{x+7} {y+8}h4v5h-4ZM{x+14} {y+5}h4v5h-4ZM{x+21} {y+8}h4v5h-4Z" fill="var(--floor)"/>')
+    return f'''<g aria-hidden="true" shape-rendering="crispEdges">
+<rect width="860" height="280" rx="12" fill="var(--sky)"/>
+<g fill="var(--cloud)">
+<path d="M45 45h12V33h20V25h28v8h20v12h13v13H45Z"/>
+<path d="M450 34h16V22h24V16h24v6h20v12h16v14H450Z"/>
+<path d="M762 39h10V29h18v-8h24v8h14v10h14v12h-80Z"/>
+</g>
+<path d="M0 220v-54h18v-24h24v-24h30v-12h32v12h30v24h24v24h18v54ZM410 220v-40h22v-24h22v-28h30v-16h30v16h30v28h22v24h22v40Z" fill="var(--hill)"/>
+<path d="M170 220v-22h18v-18h26v-14h32v14h26v18h18v22ZM610 220v-24h18v-18h22v-16h30v16h26v18h22v24Z" fill="var(--hill-front)"/>
+{''.join(blocks)}
+<rect y="220" width="860" height="60" fill="var(--soil)"/>
+<path d="M0 232H860M0 256H860" stroke="var(--mortar)" stroke-width="2"/>
+<g stroke="var(--mortar)" stroke-width="2">{bricks}</g>
+<path d="M0 220H860v8H0Z" fill="var(--grass)"/>
+<path d="M0 220H860" stroke="var(--floor)"/>
+<g fill="var(--grass)">{tufts}</g>
+</g>'''
+
+
 def render():
     times=[i/FPS for i in range(DURATION*FPS+1)]
     states=[state(t) for t in times]
     css=['''
-:root{--floor:#d8d2c4;--blue:#68b4cd;--pink:#d68bab}
-@media(prefers-color-scheme:dark){:root{--floor:#454640;--blue:#89d2e6;--pink:#e7a7cc}}
+:root{--floor:#9d7655;--blue:#77a785;--pink:#b57b92;--sky:#faf0dc;--cloud:#fffaf0;--hill:#d5ddbb;--hill-front:#bbcda1;--grass:#88a871;--soil:#c3926c;--mortar:#ad7e5d;--block:#dcb775}
+@media(prefers-color-scheme:dark){:root{--floor:#715f4d;--blue:#9cc9a4;--pink:#dba5bd;--sky:#272c30;--cloud:#41484a;--hill:#39473e;--hill-front:#465a43;--grass:#698a5a;--soil:#785b47;--mortar:#5c4639;--block:#a08050}}
 image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infinite}
 @keyframes stride{0%{transform:translateX(0)}33.333%{transform:translateX(-64px)}66.667%{transform:translateX(-128px)}}
 .portal{transform-box:fill-box;transform-origin:center;animation:portal 24s linear infinite}
@@ -112,33 +149,33 @@ image{image-rendering:pixelated}.stride{animation:stride .36s steps(1,end) infin
 @keyframes gate{0%{clip-path:url(#entry-clip)}26.66667%{clip-path:url(#exit-clip)}100%{clip-path:url(#entry-clip)}}
 ''']
     cats=[]
-    for prefix,color in [('a','ginger'),('c','slate')]:
+    for prefix,color in [('a','ginger'),('c','cocoa')]:
         css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.3f}px,{s[prefix+"y"]:.3f}px)' for s in states]))
         css.append(frames(prefix+'-face',[f'transform:scaleX({s[prefix+"f"]})' for s in states],True))
         poses=[]
         for pose in ['run','sit','sleep','stand1','stand2','stand3','curl1','curl2','curl3']:
             name=prefix+'-'+pose
             css.append(frames(name,[f'opacity:{int(s[prefix+"p"]==pose)}' for s in states],True))
-            poses.append(f'<g class="{name} pose">{sprite(color,pose)}</g>')
+            poses.append(f'<g class="{name} pose"><g transform="scale({CAT_SCALE})">{sprite(color,pose)}</g></g>')
         cats.append(f'<g class="{prefix}-move cat"><g class="{prefix}-face">'+''.join(poses)+'</g></g>')
     css.append(frames('ball-move',[f'transform:translate({s["bx"]:.3f}px,{s["by"]:.3f}px)' for s in states]))
-    css.append(frames('ball-spin',[f'transform:rotate({(s["bx"]-286)/8*180/pi:.3f}deg)' for s in states]))
-    css.append(frames('ball-shadow',[f'transform:translate({s["bx"]:.3f}px,151px) scale({1-(142-s["by"])/100:.3f},1);opacity:{.15-(142-s["by"])/400:.3f}' for s in states]))
+    css.append(frames('ball-spin',[f'transform:rotate({(s["bx"]-286)/BALL_RADIUS*180/pi:.3f}deg)' for s in states]))
+    css.append(frames('ball-shadow',[f'transform:translate({s["bx"]:.3f}px,221px) scale({1-(208-s["by"])/100:.3f},1);opacity:{.15-(208-s["by"])/400:.3f}' for s in states]))
     css.append('''@media(prefers-reduced-motion:reduce){
 +*{animation:none!important}.portal{display:none}.orange-gate{clip-path:none}
-+.a-move{transform:translate(150px,150px)}.c-move{transform:translate(680px,150px)}.a-face{transform:scaleX(-1)}
-+.pose{opacity:0}.a-sit,.c-sleep{opacity:1}.ball-move{transform:translate(286px,142px)}.ball-shadow{transform:translate(286px,151px);opacity:.15}
++.a-move{transform:translate(150px,220px)}.c-move{transform:translate(680px,220px)}.a-face{transform:scaleX(-1)}
++.pose{opacity:0}.a-sit,.c-sleep{opacity:1}.ball-move{transform:translate(286px,208px)}.ball-shadow{transform:translate(286px,221px);opacity:.15}
 +}'''.replace('+',''))
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="860" height="200" viewBox="0 0 860 200" role="img" aria-labelledby="title desc">
-<title id="title">Ginger and slate: a little game of fetch</title>
-<desc id="desc">A ginger cat nudges a ball toward a sleepy blue-grey cat, who wakes and bats it back. Ginger takes a portal shortcut to catch it. Both return to their spots and nap. All poses share a consistent head scale and ground line.</desc>
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="860" height="280" viewBox="0 0 860 280" role="img" aria-labelledby="title desc">
+<title id="title">Ginger and cocoa: a little pixel playground</title>
+<desc id="desc">A ginger cat nudges a ball toward a sleepy chocolate-cream cat, who wakes and bats it back. Ginger takes a portal shortcut to catch it. Both return to their spots and nap. All poses share a consistent head scale and ground line.</desc>
 <style>{''.join(css)}</style>
-<defs><clipPath id="entry-clip"><rect x="0" y="0" width="500" height="200"/></clipPath><clipPath id="exit-clip"><rect x="100" y="0" width="760" height="200"/></clipPath></defs>
-<path d="M55 151H805" stroke="var(--floor)" stroke-linecap="round"/>
-<g class="portal" fill="none" stroke="var(--pink)"><ellipse cx="100" cy="125" rx="10" ry="27" stroke-width="6" opacity=".15"/><ellipse cx="100" cy="125" rx="6" ry="26" stroke-width="2"/></g>
-<g class="portal" fill="none" stroke="var(--blue)"><ellipse cx="500" cy="125" rx="10" ry="27" stroke-width="6" opacity=".15"/><ellipse cx="500" cy="125" rx="6" ry="26" stroke-width="2"/></g>
-<ellipse class="ball-shadow" rx="8" ry="1.5" fill="#554b42"/>
-<g class="ball-move"><g class="ball-spin"><circle r="8" fill="#e8b66f" stroke="#a97943"/><path d="M-7-3Q0 3 7-3M-5 6Q1-2 5-6" fill="none" stroke="#fff0cf" stroke-width="1.5"/></g></g>
+<defs><clipPath id="entry-clip"><rect x="0" y="0" width="500" height="280"/></clipPath><clipPath id="exit-clip"><rect x="100" y="0" width="760" height="280"/></clipPath></defs>
+{environment()}
+<g class="portal" fill="none" stroke="var(--pink)"><ellipse cx="100" cy="181" rx="15" ry="40" stroke-width="6" opacity=".15"/><ellipse cx="100" cy="181" rx="9" ry="39" stroke-width="2"/></g>
+<g class="portal" fill="none" stroke="var(--blue)"><ellipse cx="500" cy="181" rx="15" ry="40" stroke-width="6" opacity=".15"/><ellipse cx="500" cy="181" rx="9" ry="39" stroke-width="2"/></g>
+<ellipse class="ball-shadow" rx="12" ry="1.5" fill="#554b42"/>
+<g class="ball-move"><g class="ball-spin"><circle r="12" fill="#8cae82" stroke="#526e50" stroke-width="1.5"/><path d="M-10-5Q0 5 10-5M-7 9Q2-3 7-9" fill="none" stroke="#fff0cf" stroke-width="1.5"/></g></g>
 <g class="orange-gate">{cats[0]}</g>{cats[1]}
 </svg>'''
 
