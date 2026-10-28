@@ -5,7 +5,7 @@
 Undergrad in Mathematics & CS, exchange @USTC   
 [curius?](https://curius.app/bhagyesh-kumar)
 
-![Ginger and cocoa cats playing fetch in a pixel platformer garden](assets/cat-playground.svg)
+![Nivi and Livi playing fetch in a pixel platformer garden](assets/cat-playground.svg)
 
 <!--
 ### Selected Projects

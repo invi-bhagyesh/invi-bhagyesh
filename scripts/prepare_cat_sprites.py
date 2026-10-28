@@ -16,22 +16,22 @@ for pose,file,scale in [('run','cat-walk-left.png',1),('sit','cat-awake.png',.72
   box=p.getbbox();p=p.crop(box)
   p=p.resize((round(p.width*scale),round(p.height*scale)),Image.Resampling.NEAREST)
   canvas=Image.new('RGBA',(64,48));canvas.alpha_composite(p,((64-p.width)//2,48-p.height));frames.append(canvas)
- for color in ['ginger','cocoa']:
+ for color in ['nivi','livi']:
   sheet=Image.new('RGBA',(64*len(frames),48))
   for i,p in enumerate(frames): sheet.alpha_composite(p,(64*i,0))
-  if color=='cocoa':
+  if color=='livi':
    for y in range(sheet.height):
     for x in range(sheet.width):
      r,g,b,a=sheet.getpixel((x,y));h,s,v=colorsys.rgb_to_hsv(r/255,g/255,b/255)
      if a and s>.25 and (h<.16 or h>.96):
-      r,g,b=colorsys.hsv_to_rgb(.075,min(s*.55,.48),v*.64+.08)
+      r,g,b=colorsys.hsv_to_rgb(.11,.035,(.18+.6*v) if v<.48 else (.78+.22*v))
       sheet.putpixel((x,y),(round(r*255),round(g*255),round(b*255),a))
   sheet.save(out/f'play-{color}-{pose}.png')
 
 from PIL import Image, ImageDraw
 from pathlib import Path
 p=Path(__file__).resolve().parent.parent/'assets'
-for color in ['ginger','cocoa']:
+for color in ['nivi','livi']:
  run=Image.open(p/f'play-{color}-run.png').crop((0,0,64,48))
  sit=Image.open(p/f'play-{color}-sit.png')
  sleep=Image.open(p/f'play-{color}-sleep.png')
@@ -47,7 +47,7 @@ for color in ['ginger','cocoa']:
   c.alpha_composite(tail,(45,round(34-27*u)))
   hx,hy=round(12-5*u),round(23-8*u)
   ty=round(34-9*u)
-  ImageDraw.Draw(c).polygon([(hx+11,hy+11),(hx+18,hy+11),(32,ty+3),(32,ty+12),(hx+10,hy+18)],fill=('#d47d36' if color=='ginger' else '#98734e'))
+  ImageDraw.Draw(c).polygon([(hx+11,hy+11),(hx+18,hy+11),(32,ty+3),(32,ty+12),(hx+10,hy+18)],fill=('#d47d36' if color=='nivi' else '#ecebe4'))
   head=run.crop((7,15,25,34))
   c.alpha_composite(head,(round(12-5*u),round(23-8*u)))
   c.save(p/f'play-{color}-stand{i}.png')
@@ -57,29 +57,3 @@ for color in ['ginger','cocoa']:
   head=sit.crop((12,19,31,44))
   c.alpha_composite(head,(12,round(19+6*u)))
   c.save(p/f'play-{color}-curl{i}.png')
-
-# Cocoa has a low, unhurried gait and a tucked-paw loaf instead of Ginger's
-# alert crouch. Keep all frames on the same canvas and ground baseline.
-run_path=p/'play-cocoa-run.png'
-sheet=Image.open(run_path)
-result=Image.new('RGBA',sheet.size)
-for frame in range(3):
- src=sheet.crop((frame*64,0,frame*64+64,48))
- dst=src.copy()
- # Shorter steps: bring the lower paws closer beneath the torso.
- dst.paste((0,0,0,0),(0,37,64,48))
- legs=src.crop((0,37,64,48)).resize((48,11),Image.Resampling.NEAREST)
- dst.alpha_composite(legs,(8,37))
- # Lower, curved tail instead of Ginger's upright flag-like tail.
- dst.paste((0,0,0,0),(47,0,64,26))
- draw=ImageDraw.Draw(dst)
- draw.line([(47,29),(52,29),(56,27),(58,24)],fill='#594737',width=4)
- draw.line([(47,28),(52,28),(56,26),(58,24)],fill='#a38a6b',width=2)
- result.alpha_composite(dst,(frame*64,0))
-result.save(run_path)
-sleep=Image.open(p/'play-cocoa-sleep.png')
-sit=Image.open(p/'play-cocoa-sit.png')
-loaf=sleep.copy()
-loaf.paste((0,0,0,0),(10,15,31,45))
-loaf.alpha_composite(sit.crop((12,19,31,44)),(12,23))
-loaf.save(p/'play-cocoa-sit.png')

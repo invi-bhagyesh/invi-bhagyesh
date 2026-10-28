@@ -33,7 +33,7 @@ def bounce(t, start, speed):
 
 
 def state(t):
-    # Paw contacts: ginger at 4s, cocoa at 6s, ginger again at 10s.
+    # Paw contacts: Nivi at 4s, Livi at 6s, Nivi again at 10s.
     if t < 4: bx = 286
     elif t < 6:
         u=t-4; bx=286+160*u-9*u*u
@@ -148,8 +148,8 @@ image{image-rendering:pixelated}
 @keyframes gate{0%{clip-path:url(#entry-clip)}26.66667%{clip-path:url(#exit-clip)}100%{clip-path:url(#entry-clip)}}
 ''']
     cats=[]
-    for prefix,color in [('a','ginger'),('c','cocoa')]:
-        css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.3f}px,{s[prefix+"y"]:.3f}px)' for s in states]))
+    for prefix,color in [('a','nivi'),('c','livi')]:
+        css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.0f}px,{s[prefix+"y"]:.0f}px)' for s in states]))
         css.append(frames(prefix+'-face',[f'transform:scaleX({s[prefix+"f"]})' for s in states],True))
         # Advance the feet by actual distance, not wall-clock time. Teleport
         # jumps and airborne movement cannot generate extra steps.
@@ -191,7 +191,7 @@ image{image-rendering:pixelated}
         css.append(frames(name,[f'opacity:{int(start<=t<end)};visibility:{"visible" if start<=t<end else "hidden"}' for t in times],True))
         css.append(frames(name+'-position',[f'transform:translate({max(115,min(745,s[speaker+"x"])):.3f}px,{s[speaker+"y"]-104:.3f}px)' for s in states]))
         width=max(146,len(line)*9+28)
-        label='GINGER' if speaker=='a' else 'COCOA'
+        label='NIVI' if speaker=='a' else 'LIVI'
         bubbles.append(f'<g class="{name} speech"><g class="{name}-position"><path d="M-8 0l8 10 8-10" fill="var(--cloud)" stroke="var(--floor)"/><rect x="{-width/2}" y="-48" width="{width}" height="50" rx="7" fill="var(--cloud)" stroke="var(--floor)"/><text y="-32" text-anchor="middle" font-family="monospace" font-size="9" fill="var(--floor)">{label}</text><text y="-12" text-anchor="middle" font-family="monospace" font-size="16" fill="var(--speech-ink)">{line}</text></g></g>')
     css.append('''@media(prefers-reduced-motion:reduce){
 +*{animation:none!important}.portal,.speech{display:none}.orange-gate{clip-path:none}
@@ -199,8 +199,8 @@ image{image-rendering:pixelated}
 +.pose{opacity:0}.a-sit,.c-sleep{opacity:1}.ball-move{transform:translate(286px,208px)}.ball-shadow{transform:translate(286px,221px);opacity:.15}
 +}'''.replace('+',''))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="860" height="280" viewBox="0 0 860 280" role="img" aria-labelledby="title desc">
-<title id="title">Ginger and cocoa: a little pixel playground</title>
-<desc id="desc">A ginger cat nudges a ball toward a sleepy chocolate-cream cat, who wakes and bats it back. Ginger takes a portal shortcut to catch it. Ginger asks, Play with me? Cocoa agrees, One round. After the portal shortcut, Cocoa asks, Portals? Really? Ginger replies, Work smarter. Cocoa says, Nap harder. Ginger later asks for a rematch. All poses share a consistent head scale and ground line.</desc>
+<title id="title">Nivi and Livi: a little pixel playground</title>
+<desc id="desc">Nivi, a ginger cat, nudges a ball toward Livi, a sleepy white cat, who wakes and bats it back. Nivi takes a portal shortcut to catch it. Nivi asks, Play with me? Livi agrees, One round. After the portal shortcut, Livi asks, Portals? Really? Nivi replies, Work smarter. Livi says, Nap harder. Nivi later asks for a rematch. All poses share a consistent head scale and ground line.</desc>
 <style>{''.join(css)}</style>
 <defs><clipPath id="entry-clip"><rect x="0" y="0" width="500" height="280"/></clipPath><clipPath id="exit-clip"><rect x="100" y="0" width="760" height="280"/></clipPath></defs>
 {environment()}
