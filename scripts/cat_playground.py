@@ -9,7 +9,10 @@ DURATION = 24
 GROUND = 220
 CAT_SCALE = 1.5
 BALL_RADIUS = 12
-FPS = 30
+FPS = 60
+WALK_FRAMES = 32
+# An extra key immediately before teleport prevents interpolation across the room.
+TIMES = sorted([i/FPS for i in range(DURATION*FPS+1)] + [6.4-0.000001])
 
 
 def ease(t, a, b, x, y):
@@ -65,10 +68,14 @@ def state(t):
     elif t < 14: cx=ease(t,10.5,14,621,680)
     else: cx=680
     def pose(running, sleeping):
-        return 'sleep' if sleeping else 'run' if running else 'sit'
+        return 'sleep' if sleeping else 'walk' if running else 'sit'
     # Brief held walking poses at impacts keep the same paw on the ball.
     ap=pose(2<=t<6.8 or 9.9<=t<10.15 or 12<=t<14,15<=t<21)
     cp=pose(3<=t<6.15 or 10.5<=t<14,t<2.3 or t>=15)
+    if ay < GROUND-.05 or 9.9<=t<10.15:
+        ap='run'
+    if 6<=t<6.15:
+        cp='run'
     # Three authored in-between poses: unfold before locomotion, settle after.
     def transition(pose, events):
         for start, family, reverse in events:
@@ -90,14 +97,14 @@ def frames(name, values, discrete=False):
     keys=[]
     for i, value in enumerate(values):
         if i in (0,len(values)-1) or value!=values[i-1] or value!=values[i+1]:
-            keys.append(f'{i/(len(values)-1)*100:.5f}%{{{value}}}')
+            keys.append(f'{TIMES[i]/DURATION*100:.8f}%{{{value}}}')
     return f'.{name}{{animation:{name} {DURATION}s {"steps(1,end)" if discrete else "linear"} infinite}}@keyframes {name}{{'+''.join(keys)+'}'
 
 
 def sprite(color, pose):
     data=base64.b64encode((ROOT/'assets'/f'play-{color}-{pose}.png').read_bytes()).decode()
-    width=192 if pose=='run' else 64
-    return f'<svg x="-32" y="-48" width="64" height="48" viewBox="0 0 64 48" overflow="hidden"><image class="{"stride" if pose=="run" else ""}" width="{width}" height="48" href="data:image/png;base64,{data}"/></svg>'
+    width=64*WALK_FRAMES if pose=='walk' else 192 if pose=='run' else 64
+    return f'<svg x="-32" y="-48" width="64" height="48" viewBox="0 0 64 48" overflow="hidden"><image class="{"stride" if pose=="walk" else ""}" width="{width}" height="48" href="data:image/png;base64,{data}"/></svg>'
 
 
 def environment():
@@ -136,7 +143,7 @@ def environment():
 
 
 def render():
-    times=[i/FPS for i in range(DURATION*FPS+1)]
+    times=TIMES
     states=[state(t) for t in times]
     css=['''
 :root{--speech-ink:#493b30;--floor:#9d7655;--blue:#77a785;--pink:#b57b92;--sky:#faf0dc;--cloud:#fffaf0;--hill:#d5ddbb;--hill-front:#bbcda1;--grass:#88a871;--soil:#c3926c;--mortar:#ad7e5d;--block:#dcb775}
@@ -149,7 +156,7 @@ image{image-rendering:pixelated}
 ''']
     cats=[]
     for prefix,color in [('a','nivi'),('c','livi')]:
-        css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.0f}px,{s[prefix+"y"]:.0f}px)' for s in states]))
+        css.append(frames(prefix+'-move',[f'transform:translate({s[prefix+"x"]:.3f}px,{s[prefix+"y"]:.3f}px)' for s in states]))
         css.append(frames(prefix+'-face',[f'transform:scaleX({s[prefix+"f"]})' for s in states],True))
         # Advance the feet by actual distance, not wall-clock time. Teleport
         # jumps and airborne movement cannot generate extra steps.
@@ -160,15 +167,15 @@ image{image-rendering:pixelated}
                 previous=states[i-1]
                 dx=abs(current[prefix+'x']-previous[prefix+'x'])
                 grounded=current[prefix+'y']>=GROUND-.05 and previous[prefix+'y']>=GROUND-.05
-                if dx<12 and grounded and current[prefix+'p']=='run':
+                if dx<12 and grounded and current[prefix+'p']=='walk':
                     distance+=dx
-            stride_length=30 if prefix=='a' else 43
-            frame=int(distance/stride_length*3)%3
+            stride_length=(24 if prefix=='a' else 20)*CAT_SCALE
+            frame=int(distance/stride_length*WALK_FRAMES)%WALK_FRAMES
             gait.append(f'transform:translateX({-64*frame}px)')
         gait_css=frames(prefix+'-stride',gait,True)
         css.append(gait_css.replace('.'+prefix+'-stride{','.'+prefix+'-move .stride{'))
         poses=[]
-        for pose in ['run','sit','sleep','stand1','stand2','stand3','curl1','curl2','curl3']:
+        for pose in ['walk','run','sit','sleep','stand1','stand2','stand3','curl1','curl2','curl3']:
             name=prefix+'-'+pose
             css.append(frames(name,[f'opacity:{int(s[prefix+"p"]==pose)}' for s in states],True))
             poses.append(f'<g class="{name} pose"><g transform="scale({CAT_SCALE})">{sprite(color,pose)}</g></g>')
@@ -200,7 +207,7 @@ image{image-rendering:pixelated}
 +}'''.replace('+',''))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="860" height="280" viewBox="0 0 860 280" role="img" aria-labelledby="title desc">
 <title id="title">Nivi and Livi: a little pixel playground</title>
-<desc id="desc">Nivi, a ginger cat, nudges a ball toward Livi, a sleepy white cat, who wakes and bats it back. Nivi takes a portal shortcut to catch it. Nivi asks, Play with me? Livi agrees, One round. After the portal shortcut, Livi asks, Portals? Really? Nivi replies, Work smarter. Livi says, Nap harder. Nivi later asks for a rematch. All poses share a consistent head scale and ground line.</desc>
+<desc id="desc">Nivi, a ginger cat, nudges a ball toward Livi, a sleepy apricot-orange cat with russet spots, who wakes and bats it back. Nivi takes a portal shortcut to catch it. Nivi asks, Play with me? Livi agrees, One round. After the portal shortcut, Livi asks, Portals? Really? Nivi replies, Work smarter. Livi says, Nap harder. Nivi later asks for a rematch. All poses share a consistent head scale and ground line.</desc>
 <style>{''.join(css)}</style>
 <defs><clipPath id="entry-clip"><rect x="0" y="0" width="500" height="280"/></clipPath><clipPath id="exit-clip"><rect x="100" y="0" width="760" height="280"/></clipPath></defs>
 {environment()}

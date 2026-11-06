@@ -1,6 +1,6 @@
 # Cat playground
 
-The original ginger pixel cat plays fetch with a white companion. Nivi
+The original ginger pixel cat plays fetch with an apricot-orange spotted companion. Nivi
 uses a portal shortcut while Livi wakes up, returns the ball, and naps.
 The standalone SVG sits near the top of the README; it needs no network calls.
 
@@ -27,9 +27,9 @@ and dark palettes. The generated sprite assets use the nivi and livi names.
 
 ## Character and story timing
 
-Nivi has an eager trot. Livi, the white cat, takes a slower-paced walk. Both
+Nivi has an eager trot. Livi, the apricot-orange spotted cat, takes a slower-paced walk. Both
 use complete source frames; the earlier cropped-leg and tail edits were removed
-because they broke the silhouette. White fur retains darker outlines for contrast. Gait frames advance from actual distance
+because they broke the silhouette. Apricot fur retains darker outlines and russet spots for contrast. Gait frames advance from actual distance
 travelled while grounded; stationary poses and jumps do not advance the feet.
 The teleport displacement is excluded from travelled distance.
 
@@ -38,3 +38,13 @@ Livi noticing the portal shortcut, Nivi's reply, and Livi choosing a nap.
 Nivi asks for a rematch after waking. Only one speech bubble appears at a time;
 reduced motion hides dialogue and shows a still scene. The SVG description also
 provides the conversation for readers who cannot see the animation.
+
+Walking uses 32 generated frames with a shared torso and articulated legs, avoiding
+frame-to-frame silhouette shifts. Nivi trots with diagonal pairs; Livi walks with
+staggered footfalls and a longer planted phase. The stride covers 24 or 20 sprite
+pixels respectively, multiplied by the display scale. Each planted paw moves
+backwards relative to the body at the same rate the body moves forwards; swing
+phases lift and return the paw. Pixel rounding leaves less than 3 screen pixels of
+contact drift. Positions are sampled at 60 Hz and retain subpixel precision.
+Airborne and ball-tap poses hold still rather than cycling the legs. A keyframe
+immediately before teleport prevents a visible slide between the two portals.
